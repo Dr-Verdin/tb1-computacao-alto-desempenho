@@ -73,3 +73,25 @@ typedef struct
     int *ativacao;                              // passo de ativação da zona que cobre cada célula; -1 indica que nenhuma zona cobre a célula
     long long celulas_combustiveis_iniciais;    // número de células inicialmente combustíveis (vegetação + floresta)
 } Simulation;
+
+typedef struct {
+    long long passos;   // número de passos da simulação
+
+    long long nao_combustiveis; // número de células não combustíveis (água + solo)
+    long long intactas;         // número de células intactas (vegetação + floresta)
+    long long em_chamas;        // número de células em chamas
+    long long queimadas;        // número de células queimadas
+    long long contencao;        // número de células em contenção
+
+    long long total_ignicoes;   // número total de ignições por propagação durante a simulação
+
+    long long pico_passo;       // passo com maior número de novas ignições
+long long pico_quantidade;      // número de novas ignições nesse passo
+
+    double percentual_queimado;     // percentual de células queimadas em relação ao total de células inicialmente combustíveis
+    double percentual_protegido;    // percentual de células protegidas em relação ao total de células inicialmente combustíveis
+
+    unsigned long long checksum;    // soma de verificação (checksum) do estado final da simulação
+
+    double tempo;   // tempo total de execução da simulação em segundos
+} Result;
