@@ -27,16 +27,16 @@ typedef struct Config
 {
     // Primeira linha:
     int L;             // número de linhas da matriz
-    int c;             // número de colunas da matriz
+    int C;             // número de colunas da matriz
     int P;             // número de passos da simulação
     int T;             // número de threads
     unsigned int seed; // semente para geração de números aleatórios
-    float LIMIAR;      // limiar de propagação do fogo
+    int limiar;      // limiar de propagação do fogo
 
     // Segunda linha:
     int vento_linha;  // direção do vento na linha
     int vento_coluna; // direção do vento na coluna
-    int V;            // intensidade do vento
+    int intensidade;            // intensidade do vento
 
     // Terceira linha:
     int F; // número de focos de incêndio
