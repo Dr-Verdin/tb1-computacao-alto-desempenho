@@ -250,4 +250,14 @@ void free_simulation(Simulation *simulation){
     free(simulation->proximo_estado);
     free(simulation->tempo_atual);
     free(simulation->proximo_tempo);
+    free(simulation->ativacao);
+    free(simulation->zonas);
+
+    simulation->cells = NULL;
+    simulation->estado_atual = NULL;
+    simulation->proximo_estado = NULL;
+    simulation->tempo_atual = NULL;
+    simulation->proximo_tempo = NULL;
+    simulation->ativacao = NULL;
+    simulation->zonas = NULL;
 }
