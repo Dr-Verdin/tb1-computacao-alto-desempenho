@@ -6,6 +6,14 @@
 // constantes para os códigos de cobertura e estado.
 
 #ifndef SIMULATION_H
+// Config → parâmetros da simulação;
+// Cell → cobertura e umidade;
+// Zone → informações das zonas;
+// Simulation → todas as estruturas necessárias durante a simulação;
+// Results → resultados que serão impressos no final;
+// constantes para os códigos de cobertura e estado.
+
+#ifndef SIMULATION_H
 #define SIMULATION_H
 
 // Códigos das coberturas:
@@ -29,12 +37,12 @@ typedef struct Config
     int P;             // número de passos da simulação
     int T;             // número de threads
     unsigned int seed; // semente para geração de números aleatórios
-    int limiar;      // limiar de propagação do fogo
+    int limiar;        // limiar de propagação do fogo
 
     // Segunda linha:
     int vento_linha;  // direção do vento na linha
     int vento_coluna; // direção do vento na coluna
-    int intensidade;            // intensidade do vento
+    int intensidade;  // intensidade do vento
 
     // Terceira linha:
     int F; // número de focos de incêndio
@@ -43,7 +51,7 @@ typedef struct Config
 
 typedef struct Cell
 {
-    int cobertura; // código da cobertura: valoro nome da variavel?
+    int cobertura; // código da cobertura
     int umidade;   // umidade do terreno
 } Cell;
 
@@ -84,7 +92,7 @@ typedef struct {
     long long total_ignicoes;   // número total de ignições por propagação durante a simulação
 
     long long pico_passo;       // passo com maior número de novas ignições
-    long long pico_quantidade;      // número de novas ignições nesse passo
+    long long pico_quantidade;  // número de novas ignições nesse passo
 
     double percentual_queimado;     // percentual de células queimadas em relação ao total de células inicialmente combustíveis
     double percentual_protegido;    // percentual de células protegidas em relação ao total de células inicialmente combustíveis
