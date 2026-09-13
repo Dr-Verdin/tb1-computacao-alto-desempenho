@@ -21,7 +21,6 @@
 #define ESTADO_QUEIMADA 3
 #define ESTADO_CONTENCAO 4
 
-
 typedef struct Config
 {
     // Primeira linha:
@@ -85,7 +84,7 @@ typedef struct {
     long long total_ignicoes;   // número total de ignições por propagação durante a simulação
 
     long long pico_passo;       // passo com maior número de novas ignições
-long long pico_quantidade;      // número de novas ignições nesse passo
+    long long pico_quantidade;      // número de novas ignições nesse passo
 
     double percentual_queimado;     // percentual de células queimadas em relação ao total de células inicialmente combustíveis
     double percentual_protegido;    // percentual de células protegidas em relação ao total de células inicialmente combustíveis

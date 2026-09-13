@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "input.h"
+#include "output.h"
 
 int main(int argc, char *argv[])
 {
@@ -84,6 +85,26 @@ int main(int argc, char *argv[])
                testes_coluna[i],
                simulation.ativacao[indice]);
     }
+
+    printf("\n=== TESTE OUTPUT ===\n");
+
+    Result result = {0};
+
+    calculate_checksum(&simulation, &result);
+    calculate_percentages(&simulation, &result);
+
+    result.passos = 0;
+    result.nao_combustiveis = 0;
+    result.intactas = 0;
+    result.em_chamas = 0;
+    result.queimadas = 0;
+    result.contencao = 0;
+    result.total_ignicoes = 0;
+    result.pico_passo = -1;
+    result.pico_quantidade = 0;
+    result.tempo = 0.123456;
+
+    print_results(&result);
 
     free_simulation(&simulation);
 
