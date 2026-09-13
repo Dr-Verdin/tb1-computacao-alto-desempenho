@@ -101,13 +101,16 @@ int read_input(const char *filename, Simulation *simulation){
         return 1;
     }
 
+    // Define a semente
+    srand(simulation->config.seed);
+
     // Inicializa as células com coberturas e umidades aleatórias
     for (int linha = 0; linha < simulation->config.L; linha++) {
         for (int coluna = 0; coluna < simulation->config.C; coluna++) {
             long long indice = (long long)linha * simulation->config.C + coluna;
 
-            int valor = rand_r(&simulation->config.seed) % 100;
-            int umidade = rand_r(&simulation->config.seed) % 101;
+            int valor = rand() % 100;
+            int umidade = rand() % 101;
 
             if (valor < 10) {
                 simulation->cells[indice].cobertura = COBERTURA_AGUA;

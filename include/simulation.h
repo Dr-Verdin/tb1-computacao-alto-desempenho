@@ -21,7 +21,6 @@
 #define ESTADO_QUEIMADA 3
 #define ESTADO_CONTENCAO 4
 
-#endif // SIMULATION_H
 
 typedef struct Config
 {
@@ -95,3 +94,5 @@ long long pico_quantidade;      // número de novas ignições nesse passo
 
     double tempo;   // tempo total de execução da simulação em segundos
 } Result;
+
+#endif // SIMULATION_H
