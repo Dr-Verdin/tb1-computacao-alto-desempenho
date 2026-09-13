@@ -6,14 +6,6 @@
 // constantes para os códigos de cobertura e estado.
 
 #ifndef SIMULATION_H
-// Config → parâmetros da simulação;
-// Cell → cobertura e umidade;
-// Zone → informações das zonas;
-// Simulation → todas as estruturas necessárias durante a simulação;
-// Results → resultados que serão impressos no final;
-// constantes para os códigos de cobertura e estado.
-
-#ifndef SIMULATION_H
 #define SIMULATION_H
 
 // Códigos das coberturas:
@@ -28,9 +20,6 @@
 #define ESTADO_CHAMAS 2
 #define ESTADO_QUEIMADA 3
 #define ESTADO_CONTENCAO 4
-
-#include "../include/input.h"
-#include "../include/output.h"
 
 #include <omp.h>
 
