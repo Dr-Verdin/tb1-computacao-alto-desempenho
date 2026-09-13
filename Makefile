@@ -13,6 +13,6 @@ input.o:
 
 output.o:
 	gcc $(FLAGS) src/output.c -c output.o
-	
+
 clean:
-	rm fire_seq fire_omp *.o
+	rm -f fire_seq fire_omp *.o
