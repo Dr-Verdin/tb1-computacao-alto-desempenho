@@ -1,0 +1,11 @@
+passos: 16
+nao_combustiveis: 18
+intactas: 12
+em_chamas: 0
+queimadas: 70
+contencao: 0
+total_ignicoes: 69
+pico_ignicoes: 7 9
+percentual_queimado: 85.37
+percentual_protegido: 0.00
+checksum: 13844798147504321058
