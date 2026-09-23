@@ -148,20 +148,11 @@ static void Update_cell(Simulation* s, int linha, int coluna){
  * Células intactas tornam-se contenção; zonas não apagam fogo.
  */
 static void Activate_zones(Simulation* s, int passo){
-    int C = s->config.C;
-
-    for(int z = 0; z < s->config.Z; z++){
-        Zone* zona = &s->zonas[z];
-
-        if(zona->passo_ativacao != passo) continue;
-
-        for(int i = zona->linha_inicial; i <= zona->linha_final; i++){
-            for(int j = zona->coluna_inicial; j <= zona->coluna_final; j++){
-                int indice = i*C + j;
-
-                if(s->estado_atual[indice] == ESTADO_INTACTA)
-                    s->estado_atual[indice] = ESTADO_CONTENCAO;
-            }
+    int total_celulas = s->config.L * s->config.C;
+    for (int indice = 0; indice < total_celulas; indice++) {
+        if (s->ativacao[indice] == passo &&
+            s->estado_atual[indice] == ESTADO_INTACTA) {
+            s->estado_atual[indice] = ESTADO_CONTENCAO;
         }
     }
 }

@@ -74,18 +74,10 @@ int main(int argc, char *argv[]) {
 			// Ativar contenção
 			// ativacao[i] = passo && estado = INTACTO
 			#pragma omp for simd schedule(static)
-            for (int k = 0; k < sim->config.Z; k++) {
-                Zone *z = &sim->zonas[k];
-
-                if (z->passo_ativacao == passo) {
-                    for (int i = z->linha_inicial; i <= z->linha_final; i++) {
-                        for (int j = z->coluna_inicial; j <= z->coluna_final; j++) {
-                            int idx = i * C + j;
-                            if (sim->estado_atual[idx] == ESTADO_INTACTA) {
-                            	sim->estado_atual[idx] = ESTADO_CONTENCAO;
-                            }
-                        }
-                    }
+            for (int idx = 0; idx < total_celulas; idx++) {
+                if (sim->ativacao[idx] == passo &&
+                    sim->estado_atual[idx] == ESTADO_INTACTA) {
+                    sim->estado_atual[idx] = ESTADO_CONTENCAO;
                 }
             }
 

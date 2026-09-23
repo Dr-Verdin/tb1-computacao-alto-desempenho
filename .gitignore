@@ -1,3 +1,4 @@
 *.o
 fire_seq
 fire_omp
+.venv
