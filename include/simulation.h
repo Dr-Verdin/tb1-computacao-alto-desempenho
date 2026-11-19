@@ -21,8 +21,6 @@
 #define ESTADO_QUEIMADA 3
 #define ESTADO_CONTENCAO 4
 
-#include <omp.h>
-
 
 typedef struct Config
 {

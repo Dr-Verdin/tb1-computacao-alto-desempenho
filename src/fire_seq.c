@@ -18,11 +18,25 @@ int main(int argc, char **argv){
 
     // Aloca estruturas de simulação e resultados
     Simulation* s = (Simulation*)malloc(sizeof(Simulation));
+
+    if(s == NULL){
+        fprintf(stderr, "Erro ao alocar memória\n");
+        return 1;
+    }
+
     Result* res = (Result*)malloc(sizeof(Result));
+
+    if(res == NULL){
+        fprintf(stderr, "Erro ao alocar memória\n");
+        free(s);
+        return 1;
+    }
 
     // Lê e valida o arquivo de entrada (preenche `s`)
     if (read_input(argv[1], s) != 0) {
         fprintf(stderr, "Erro ao ler o arquivo de entrada\n");
+        free(s);
+        free(res);
         return 1;
     }
 

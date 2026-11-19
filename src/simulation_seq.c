@@ -1,5 +1,6 @@
 #include "../include/simulation.h"
 #include <stdlib.h>
+#include <omp.h>
 
 /* Implementação sequencial do núcleo da simulação.
  * Contém funções para calcular ignição, atualizar uma célula,
