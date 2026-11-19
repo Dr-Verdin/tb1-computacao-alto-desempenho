@@ -11,7 +11,7 @@
 /* Calcula o potencial de ignição da célula (linha,coluna).
  * Retorna o valor inteiro do potencial conforme a especificação.
  */
-static int Calculate_ignition(Simulation* s, int linha, int coluna){
+static int calculate_ignition(Simulation* s, int linha, int coluna){
     int L = s->config.L;
     int C = s->config.C;
 
@@ -34,7 +34,7 @@ static int Calculate_ignition(Simulation* s, int linha, int coluna){
             // Ignora vizinhos fora da matriz.
             if(viz_coluna < 0 || viz_linha < 0 || viz_coluna >= C || viz_linha >= L) continue;
 
-            int indice = viz_linha*C + viz_coluna;
+            long long indice = (long long) viz_linha*C + viz_coluna;
 
             // Somente vizinhos em chamas contribuem.
             if(s->estado_atual[indice] != ESTADO_CHAMAS) continue;
@@ -65,7 +65,7 @@ static int Calculate_ignition(Simulation* s, int linha, int coluna){
         }
     }
     // Características da célula que pode pegar fogo.
-    int indice = linha*C + coluna;
+    long long indice = (long long) linha*C + coluna;
     int cobertura = s->cells[indice].cobertura;
     int umidade = s->cells[indice].umidade;
 
@@ -87,8 +87,8 @@ static int Calculate_ignition(Simulation* s, int linha, int coluna){
 /* Atualiza `proximo_estado` e `proximo_tempo` para a célula.
  * Não altera os arrays atuais; escreve apenas nos arrays de próximo.
  */
-static void Update_cell(Simulation* s, int linha, int coluna){
-    int indice = linha*s->config.C + coluna;
+static void update_cell(Simulation* s, int linha, int coluna){
+    long long indice = (long long) linha*s->config.C + coluna;
 
     // Não combustível.
     if (s->estado_atual[indice] == ESTADO_NAO_COMBUSTIVEL) {
@@ -100,7 +100,7 @@ static void Update_cell(Simulation* s, int linha, int coluna){
 
     // Intacta.
     if(s->estado_atual[indice] == ESTADO_INTACTA){
-        int potencial = Calculate_ignition(s, linha, coluna);
+        int potencial = calculate_ignition(s, linha, coluna);
 
         if(potencial >= s->config.limiar){
             s->proximo_estado[indice] = ESTADO_CHAMAS;
@@ -148,9 +148,11 @@ static void Update_cell(Simulation* s, int linha, int coluna){
 /* Ativa todas as zonas cuja ativação == passo.
  * Células intactas tornam-se contenção; zonas não apagam fogo.
  */
-static void Activate_zones(Simulation* s, int passo){
-    int total_celulas = s->config.L * s->config.C;
-    for (int indice = 0; indice < total_celulas; indice++) {
+static void activate_zones(Simulation* s, int passo){
+    
+    long long total_celulas = (long long) s->config.L * s->config.C;
+
+    for (long long indice = 0; indice < total_celulas; indice++) {
         if (s->ativacao[indice] == passo &&
             s->estado_atual[indice] == ESTADO_INTACTA) {
             s->estado_atual[indice] = ESTADO_CONTENCAO;
@@ -160,13 +162,13 @@ static void Activate_zones(Simulation* s, int passo){
 
 /* Calcula o próximo estado para todas as células e atualiza os
  * contadores em `res` relativos ao próximo passo.
- * Retorna o número de novas ignições (intacta -> chamas).
+ * Retorna um long long com o número de novas ignições (intacta -> chamas).
  */
-static int Calculate_next_state(Simulation* s, Result *res){
+static long long calculate_next_state(Simulation* s, Result *res){
     int L = s->config.L;
     int C = s->config.C;
 
-    int ignicoes = 0;
+    long long ignicoes = 0;
 
     // Zera as estatísticas do passo
     res->nao_combustiveis = 0;
@@ -179,9 +181,9 @@ static int Calculate_next_state(Simulation* s, Result *res){
         for(int j = 0; j < C; j++){
 
             // Calcula o próximo estado
-            Update_cell(s, i, j);
+            update_cell(s, i, j);
 
-            int indice = i*C + j;
+            long long indice = (long long) i*C + j;
 
             // Nova ignição: intacta -> chamas
             if (s->estado_atual[indice] == ESTADO_INTACTA && s->proximo_estado[indice] == ESTADO_CHAMAS) {
@@ -218,7 +220,7 @@ static int Calculate_next_state(Simulation* s, Result *res){
 /* Troca os ponteiros dos arrays atual <-> próximo (estado e tempo).
  * Operação em tempo constante.
  */
-static void Swap_arrays(Simulation* s){
+static void swap_arrays(Simulation* s){
     int* temp;
 
     temp = s->estado_atual;
@@ -234,7 +236,7 @@ static void Swap_arrays(Simulation* s){
  * Ordem por passo: ativar zonas, calcular próximo estado, atualizar
  * estatísticas, trocar buffers e verificar condição de parada.
  */
-void Simulate_sequential(Simulation* s, Result *res){
+void simulate_sequential(Simulation* s, Result *res){
     int passo = 0;
 
     // Inicializa os resultados acumulativos
@@ -242,12 +244,37 @@ void Simulate_sequential(Simulation* s, Result *res){
     res->pico_quantidade = 0;
     res->pico_passo = -1;
 
-    // Conta quantas células estão em chamas inicialmente
+    // Inicializa as estatísticas com os estados atuais da grade.
     long long total_cells = (long long)s->config.L * s->config.C;
+
+    res->nao_combustiveis = 0;
+    res->intactas = 0;
     res->em_chamas = 0;
+    res->queimadas = 0;
+    res->contencao = 0;
+
     for (long long i = 0; i < total_cells; i++) {
-        if (s->estado_atual[i] == ESTADO_CHAMAS)
-            res->em_chamas++;
+        switch (s->estado_atual[i]) {
+            case ESTADO_NAO_COMBUSTIVEL:
+                res->nao_combustiveis++;
+                break;
+
+            case ESTADO_INTACTA:
+                res->intactas++;
+                break;
+
+            case ESTADO_CHAMAS:
+                res->em_chamas++;
+                break;
+
+            case ESTADO_QUEIMADA:
+                res->queimadas++;
+                break;
+
+            case ESTADO_CONTENCAO:
+                res->contencao++;
+                break;
+        }
     }
 
     // Se não há chamas após inicialização, termina.
@@ -261,10 +288,10 @@ void Simulate_sequential(Simulation* s, Result *res){
 
     while(passo < s->config.P){
         // Ativa as zonas de contenção no passo atual.
-        Activate_zones(s, passo);
+        activate_zones(s, passo);
 
         // Calcula o próximo estado da simulação.
-        int ignicoes = Calculate_next_state(s, res);
+        long long ignicoes = calculate_next_state(s, res);
 
         // Atualiza a variavel acumulativa de ignições.
         res->total_ignicoes += ignicoes;
@@ -276,7 +303,7 @@ void Simulate_sequential(Simulation* s, Result *res){
         }
 
         // Troca os arrays atual <-> próximo.
-        Swap_arrays(s);
+        swap_arrays(s);
 
         passo++;
 

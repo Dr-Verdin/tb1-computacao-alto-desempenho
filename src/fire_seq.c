@@ -41,7 +41,7 @@ int main(int argc, char **argv){
     }
 
     // Executa a simulação sequencial
-    Simulate_sequential(s, res);
+    simulate_sequential(s, res);
 
     // Pós-processamento e impressão dos resultados finais
     calculate_checksum(s, res);
